@@ -1,0 +1,104 @@
+package Practice;
+
+import java.util.ArrayList;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.*;
+
+public class Demo 
+{
+	 
+	WebDriver driver;
+	
+	@BeforeTest
+	public void Browser()
+	{
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\pr376979\\Documents\\chromedriver(1).exe");
+		WebDriver driver  = new ChromeDriver();
+		driver.get("https://demoqa.com/selectable/");
+		System.out.println("after launch");
+		driver.manage().window().maximize();
+	}
+	@Test(priority = 0)
+	public void selectable() throws InterruptedException
+	{
+		ArrayList<WebElement> items = (ArrayList<WebElement>) driver.findElements(By.xpath("//ol[@id='selectable']/li"));
+		 System.out.println(items.size());
+		 
+		 for(int i=0; i<items.size(); i++)
+		 {
+			 Thread.sleep(2000);
+			 items.get(i).click();
+			 System.out.println(items.get(i).getText());
+		 }
+	}
+	
+	@Test(priority = 1)
+	public void draganddrop()
+	{
+		driver.get("https://demoqa.com/droppable/");
+
+		Actions a = new Actions(driver);
+
+		WebElement source = driver.findElement(By.id("draggable"));
+		WebElement target = driver.findElement(By.id("droppable"));
+
+		a.dragAndDrop(source, target).build().perform();
+
+		
+
+		System.out.println(target.getText());
+	}
+	
+	@Test(priority = 2)
+	public void datepicker()
+	{
+		driver.get("https://demoqa.com/datepicker/");
+		String dob;
+		dob="12/05/1994";
+		driver.findElement(By.xpath("//input[@id='datepicker']")).sendKeys(dob);
+		driver.findElement(By.xpath("//input[@id='datepicker']")).sendKeys(Keys.ENTER);
+	}
+	@Test(priority = 3)
+	public void selectmenu() throws InterruptedException
+	{
+		driver.get("https://demoqa.com/datepicker/");
+		driver.findElement(By.xpath("//*[@id=\"speed-button\"]")).sendKeys("Slow");
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id=\"files-button\"]")).sendKeys("Some unknown file");
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id=\"number-button\"]")).sendKeys("3");
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id=\"salutation-button\"]")).sendKeys("Mr.");
+		Thread.sleep(2000);
+	}
+	@Test(priority = 4)
+	public void contactform()
+	{
+		driver.get("https://demoqa.com/html-contact-form/");
+		driver.findElement(By.className("firstname")).sendKeys("Priyanka");
+		driver.findElement(By.id("lname")).sendKeys("J");
+		driver.findElement(By.name("country")).sendKeys("India");
+		driver.findElement(By.id("subject")).sendKeys("Hi all");
+		
+		driver.findElement(By.partialLinkText("Link")).click();
+		driver.navigate().back();
+		
+		driver.findElement(By.partialLinkText("here")).click();
+		driver.navigate().back();
+		
+		driver.findElement(By.xpath("//input[@type='submit']")).click();
+	}
+	
+	@AfterTest
+	public void done()
+	{
+		driver.close();
+	}
+
+}
