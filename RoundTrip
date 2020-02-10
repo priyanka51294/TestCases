@@ -1,0 +1,70 @@
+package Demo;
+
+import java.util.Iterator;
+import java.util.Set;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class roundtrip {
+
+	public static void main(String[] args) throws InterruptedException {
+		// TODO Auto-generated method stub
+
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://www.makemytrip.com/");
+		driver.manage().window().maximize();
+		
+		driver.findElement(By.xpath("//li[@data-cy='roundTrip']")).click();
+		//FromCity
+		driver.findElement(By.xpath("//label[@for='fromCity']")).sendKeys("MAA");
+		Thread.sleep(2000);
+		
+		driver.findElement(By.xpath("//ul[@role='listbox']/li")).click();
+		
+		driver.findElement(By.xpath("//*[@id=\"react-autowhatever-1-section-0-item-0\"]/div")).click();
+		
+		///ToCity
+		
+		driver.findElement(By.xpath("//label[@for='toCity']")).sendKeys("DEL");
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id=\"react-autowhatever-1-section-0-item-0\"]/div")).click();
+		
+		//Date
+		driver.findElement(By.xpath("//label[@for='departure']")).click();
+		Thread.sleep(3000);
+		
+		driver.findElement(By.xpath("//div[@aria-label='Wed Feb 12 2020']")).click();
+		Thread.sleep(2000);
+		
+		
+		driver.findElement(By.xpath("//*[@id=\"SW\"]/div[2]/div[2]/div/div/nav/ul/li[1]/a")).click();
+		
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[text()='Search']")).click();
+		Thread.sleep(2000);
+		System.out.println("Search button clicked");
+		
+		driver.findElement(By.id("sorter_btn_onward")).click();
+		driver.findElement(By.xpath("//ul[@class='dropdown-menu custom-scroll']/li/a")).click();
+		
+		System.out.println("Sorted from Price Low to High");
+		
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//div[@class='pull-left make_flex alC']/button")).click();
+		
+		Set<String> id = driver.getWindowHandles();
+		Iterator<String> it = id.iterator();
+		String parent = it.next();
+		String child = it.next();
+		driver.switchTo().window(child);
+		
+		System.out.println("Verifying the details ======");
+		System.out.println(driver.findElement(By.xpath("//*[@id=\"root\"]/div/div[2]/div[2]/div[1]/div[1]/div[1]/div[1]/div/div[1]/div[1]/div[2]")).getText());
+		
+		driver.quit();
+	}
+
+}
